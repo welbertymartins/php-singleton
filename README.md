@@ -1,4 +1,4 @@
-# PHP Singleton Container
+# PHP Singleton Container (v.8.2.0)
 A minimal and testable singleton container for managing and retrieving shared instances in PHP.
 
 ---
