@@ -50,7 +50,7 @@ composer test
 
 ```
 src/     → Main singleton implementation  
-tests/   → PHPUnit test suite  
+test/   → PHPUnit test suite  
 ```
 
 ---
@@ -104,9 +104,6 @@ Contributions, issues, and feature requests are welcome!
 ## 🔗 Useful Links
 
 * 📦 [Packagist](https://packagist.org/packages/welbertymartins/php-singleton)
-* 🧪 [PHPUnit](https://phpunit.de/)
-* 🧼 [PHP\_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer)
-* 🔍 [Psalm](https://psalm.dev/)
 
 ```
 
