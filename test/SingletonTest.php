@@ -1,5 +1,7 @@
 <?php declare(strict_types=1);
 
+namespace Test\WelbertyMartins\Singleton;
+
 use PHPUnit\Framework\TestCase;
 use WelbertyMartins\Singleton\Singleton;
 
