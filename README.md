@@ -1,9 +1,4 @@
 # PHP Singleton Container
-
-[![Tests](https://github.com/welbertymartins/php-singleton/actions/workflows/test.yml/badge.svg)](https://github.com/welbertymartins/php-singleton/actions)
-[![Latest Stable Version](https://img.shields.io/packagist/v/welbertymartins/php-singleton.svg)](https://packagist.org/packages/welbertymartins/php-singleton)
-[![License](https://img.shields.io/github/license/welbertymartins/php-singleton)](LICENSE)
-
 A minimal and testable singleton container for managing and retrieving shared instances in PHP.
 
 ---
