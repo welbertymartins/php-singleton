@@ -1,33 +1,44 @@
-name: Run Tests
+name: Validate Singleton Test Suite
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'composer.json'
+      - 'composer.lock'
+      - 'phpunit.xml'
   pull_request:
     branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'composer.json'
+      - 'composer.lock'
+      - 'phpunit.xml'
 
 jobs:
-  test:
+  php-tests:
+    name: PHP ${{ matrix.php }} Test Suite
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         php: [8.1, 8.2, 8.3]
 
-    name: PHP ${{ matrix.php }} Test Suite
-
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup PHP ${{ matrix.php }}
+      - name: 🔧 Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: none
 
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+      - name: 📦 Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
 
-      - name: Run tests with PHPUnit
+      - name: ✅ Run PHPUnit tests
         run: vendor/bin/phpunit --configuration phpunit.xml
