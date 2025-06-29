@@ -6,8 +6,7 @@
     stopOnFailure="false"
     failOnRisky="true"
     failOnWarning="true"
-    testdox="true"
->
+    testdox="true">
     <testsuites>
         <testsuite name="Singleton Test Suite">
             <directory>test</directory>
