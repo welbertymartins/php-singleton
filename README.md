@@ -104,10 +104,3 @@ Contributions, issues, and feature requests are welcome!
 ## 🔗 Useful Links
 
 * 📦 [Packagist](https://packagist.org/packages/welbertymartins/php-singleton)
-
-```
-
----
-
-Would you like me to create the `LICENSE`, `.gitignore`, `.gitattributes`, and `GitHub Actions` workflow file (`test.yml`) next?
-```
