@@ -6,6 +6,7 @@ on:
     paths:
       - 'src/**'
       - 'tests/**'
+      - '.github/workflows/tests.yml'
       - 'composer.json'
       - 'composer.lock'
       - 'phpunit.xml'
@@ -16,6 +17,7 @@ on:
     paths:
       - 'src/**'
       - 'tests/**'
+      - '.github/workflows/tests.yml'
       - 'composer.json'
       - 'composer.lock'
       - 'phpunit.xml'
