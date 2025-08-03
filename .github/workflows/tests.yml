@@ -5,37 +5,55 @@ on:
     branches: [main]
     paths:
       - 'src/**'
-      - 'tests/**'
+      - 'test/**'
       - 'composer.json'
       - 'composer.lock'
       - 'phpunit.xml'
-      - 'phpunit.xml'
       - 'README.md'
+      - .github/workflows/tests.yml
 
   pull_request:
     branches: [main]
     paths:
       - 'src/**'
-      - 'tests/**'
+      - 'test/**'
       - 'composer.json'
       - 'composer.lock'
       - 'phpunit.xml'
       - 'README.md'
+      - .github/workflows/tests.yml
 
 jobs:
-  php-tests:
-    name: PHP ${{ matrix.php }} Test Suite
+  determine-php-version:
+    name: 🧾 Extract PHP version from composer.json
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        php: [8.2]
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
 
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: 🔧 Setup PHP ${{ matrix.php }}
+      - name: 🔍 Read PHP version
+        id: set-matrix
+        run: |
+          PHP_VERSION=$(jq -r '.require.php' composer.json | grep -oE '[0-9]+\.[0-9]+' | head -n1)
+          echo "Using PHP version: $PHP_VERSION"
+          echo "matrix={\"php\": [\"$PHP_VERSION\"]}" >> $GITHUB_OUTPUT
+
+  run-tests:
+    name: 🧪 Test on PHP ${{ matrix.php }}
+    needs: determine-php-version
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix: ${{ fromJson(needs.determine-php-version.outputs.matrix) }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
