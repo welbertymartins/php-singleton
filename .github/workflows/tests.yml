@@ -9,7 +9,6 @@ on:
       - 'composer.json'
       - 'composer.lock'
       - 'phpunit.xml'
-      - 'phpunit.xml'
       - 'README.md'
 
   pull_request:
@@ -27,9 +26,28 @@ jobs:
     name: PHP ${{ matrix.php }} Test Suite
     runs-on: ubuntu-latest
 
+    outputs:
+      php: ${{ steps.get-php-version.outputs.php }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🧾 Get PHP version from composer.json
+        id: get-php-version
+        run: |
+          PHP_VERSION=$(jq -r '.require.php' composer.json | grep -oE '[0-9]+\.[0-9]+' | head -n 1)
+          echo "Detected PHP version: $PHP_VERSION"
+          echo "php=$PHP_VERSION" >> $GITHUB_OUTPUT
+
+  run-tests:
+    name: PHP Test Suite
+    needs: php-tests
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        php: [8.2]
+        php: [${{ needs.php-tests.outputs.php }}]
 
     steps:
       - name: 📥 Checkout code
