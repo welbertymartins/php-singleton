@@ -95,11 +95,28 @@ final class SingletonTest extends TestCase
 
         $singleton->remember(fn() => $obj, 'legacy');
 
-        $this->expectDeprecation();
-        $this->expectDeprecationMessage('Singleton::make() is deprecated since v1.0.1. Use Singleton::get() instead.');
+        $capturedDeprecation = null;
 
-        $retrieved = $singleton->make('legacy');
+        set_error_handler(static function (int $severity, string $message) use (&$capturedDeprecation): bool {
+            if ($severity === E_USER_DEPRECATED) {
+                $capturedDeprecation = $message;
 
+                return true;
+            }
+
+            return false;
+        });
+
+        try {
+            $retrieved = $singleton->make('legacy');
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertSame(
+            'Singleton::make() is deprecated since v1.0.1. Use Singleton::get() instead.',
+            $capturedDeprecation
+        );
         $this->assertSame($obj, $retrieved);
     }
 
