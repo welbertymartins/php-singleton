@@ -29,7 +29,7 @@ final class SingletonTest extends TestCase
         $obj = new \stdClass();
         $singleton->remember(fn() => $obj, 'myObject');
 
-        $retrieved = $singleton->make('myObject');
+        $retrieved = $singleton->get('myObject');
         $this->assertSame($obj, $retrieved, 'Stored and retrieved instance should be the same.');
     }
 
@@ -39,7 +39,7 @@ final class SingletonTest extends TestCase
         $obj = new \DateTime();
         $singleton->remember(fn() => $obj);
 
-        $retrieved = $singleton->make(\DateTime::class);
+        $retrieved = $singleton->get(\DateTime::class);
         $this->assertSame($obj, $retrieved, 'Should use class name as default key.');
     }
 
@@ -61,7 +61,7 @@ final class SingletonTest extends TestCase
         $singleton->remember(fn() => $first, 'key');
         $singleton->remember(fn() => $second, 'key', force: true);
 
-        $retrieved = $singleton->make('key');
+        $retrieved = $singleton->get('key');
         $this->assertSame($second, $retrieved, 'Force should override existing instance.');
     }
 
@@ -76,7 +76,7 @@ final class SingletonTest extends TestCase
     public function testMakeReturnsNullIfNotExists(): void
     {
         $singleton = Singleton::local();
-        $this->assertNull($singleton->make('missing'), 'Should return null if instance not found.');
+        $this->assertNull($singleton->get('missing'), 'Should return null if instance not found.');
     }
 
     public function testMakeThrowsIfNoFallbackSet(): void
@@ -84,7 +84,23 @@ final class SingletonTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         $singleton = Singleton::local();
-        $singleton->make(); // No fallback set
+        $singleton->get(); // No fallback set
+    }
+
+
+    public function testMakeIsDeprecatedAndProxiesToGet(): void
+    {
+        $singleton = Singleton::local();
+        $obj = new \stdClass();
+
+        $singleton->remember(fn() => $obj, 'legacy');
+
+        $this->expectDeprecation();
+        $this->expectDeprecationMessage('Singleton::make() is deprecated since v1.0.1. Use Singleton::get() instead.');
+
+        $retrieved = $singleton->make('legacy');
+
+        $this->assertSame($obj, $retrieved);
     }
 
     public function testMakeUsesFallbackName(): void
@@ -93,7 +109,7 @@ final class SingletonTest extends TestCase
         $obj = new \stdClass();
 
         $singleton->remember(fn() => $obj, 'fallback');
-        $retrieved = $singleton->make(); // no name provided
+        $retrieved = $singleton->get(); // no name provided
 
         $this->assertSame($obj, $retrieved);
     }

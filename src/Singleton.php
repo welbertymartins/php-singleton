@@ -103,7 +103,7 @@ final class Singleton
      * @throws \InvalidArgumentException If no name is provided and no fallback is set,
      *                                   or if the instance does not exist.
      */
-    public function make(string $name = ''): ?object
+    public function get(string $name = ''): ?object
     {
         $storedName = $name ?: $this->current;
 
@@ -120,6 +120,19 @@ final class Singleton
         $this->current = '';
 
         return $this->instances[$hash];
+    }
+
+    /**
+     * @deprecated since v1.0.1 Use get() instead.
+     */
+    public function make(string $name = ''): ?object
+    {
+        trigger_error(
+            'Singleton::make() is deprecated since v1.0.1. Use Singleton::get() instead.',
+            E_USER_DEPRECATED
+        );
+
+        return $this->get($name);
     }
 
     /**

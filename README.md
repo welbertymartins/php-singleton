@@ -1,4 +1,4 @@
-# PHP Singleton Container (v.1.0.0)
+# PHP Singleton Container (v.1.0.1)
 A minimal and testable singleton container for managing and retrieving shared instances in PHP.
 
 ---
@@ -20,7 +20,7 @@ use WelbertyMartins\Singleton\Singleton;
 Singleton::root()->remember(fn() => new MyService());
 
 // Retrieve it later
-$service = Singleton::root()->make(MyService::class);
+$service = Singleton::root()->get(MyService::class);
 ```
 
 Or use an isolated container:
@@ -30,7 +30,7 @@ $container = Singleton::local();
 
 $container->remember(fn() => new MyService(), 'custom_service');
 
-$service = $container->make('custom_service');
+$service = $container->get('custom_service');
 ```
 
 ---
@@ -79,9 +79,13 @@ Returns a new isolated singleton instance.
 
 Stores an object returned by a factory under a given name (or class name by default).
 
-### `make(string $name = ''): ?object`
+### `get(string $name = ''): ?object`
 
 Retrieves a stored instance by name, or the last remembered instance.
+
+### `make(string $name = ''): ?object` *(deprecated in v1.0.1)*
+
+Backward-compatible alias for `get()`.
 
 ---
 
